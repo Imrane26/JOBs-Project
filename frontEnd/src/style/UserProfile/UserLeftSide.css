@@ -1,0 +1,109 @@
+.container {
+  grid-area: leftSide;
+}
+
+.card {
+  background-color: #fff;
+  text-align: center;
+  overflow: hidden;
+  margin-bottom: 8px;
+  border-radius: 5px;
+  transition: box-shadow 83ms;
+  position: relative;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 15%), 0 0 0 rgb(0 0 0 / 20%);
+}
+
+.userInfo {
+  border-bottom: 1px solid rgba(0 0 0 0.15);
+  padding: 12px 12px 16px;
+}
+
+.cardBackground {
+  background: url("../../../public/imgs/card-bg.svg") center/462px no-repeat;
+  height: 54px;
+  margin: -12px -12px;
+}
+
+.photo {
+  background: url("../../../public/imgs/user.svg") center/100% no-repeat;
+  background-clip: content-box;
+  box-sizing: border-box;
+  width: 72px;
+  height: 72px;
+  margin: -40px auto 12px;
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.userName {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.userEmail {
+  font-size: 14px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.details {
+  padding: 12px;
+  text-align: left;
+}
+
+.sectionTitle {
+  font-size: 14px;
+  color: #333;
+  margin: 16px 0 8px;
+}
+
+.sectionContent {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.skill {
+  display: inline-block;
+  background: #e1e9ee;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+
+.communityCard {
+  background-color: #fff;
+  text-align: center;
+  overflow: hidden;
+  margin-bottom: 8px;
+  border-radius: 5px;
+  transition: box-shadow 83ms;
+  position: relative;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 15%), 0 0 0 rgb(0 0 0 / 20%);
+}
+
+.communityLink {
+  padding: 10px 18px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+}
+
+.communityLink:hover {
+  color: #058c42;
+  cursor: pointer;
+}
+
+.communityLinkLast {
+  color: rgba(0, 0, 0, 0.6);
+  border-top: 1px solid #d6ced6;
+}
+
+.communityLinkLast:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #058c42;
+}

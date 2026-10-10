@@ -1,0 +1,290 @@
+.infos_prsnl_recruteur_container form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 70px 0;
+  width: 900px;
+}
+
+.infos_prsnl_recruteur_container form input,
+.infos_prsnl_recruteur_container form select {
+  padding: 10px;
+  margin: 10px;
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+}
+
+.infos_prsnl_recruteur_container form .input_date label {
+  width: 100%;
+}
+.infos_prsnl_recruteur_container form .btn {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  margin-top: 100px;
+}
+.infos_prsnl_recruteur_container form button {
+  padding: 10px 20px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+  margin: 0 10px;
+  cursor: pointer;
+}
+.infos_prsnl_recruteur_container form button:hover {
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
+}
+#suivant {
+  color: #fff;
+  background-color: green;
+}
+.infos_prsnl_recruteur_container form .recruteur {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  padding: 10px 15px;
+}
+.infos_prsnl_recruteur_container form .recruteur i {
+  cursor: pointer;
+}
+
+.entreprise_select {
+  background-color: #87ebaf;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.new_company {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.new_company label {
+  width: 100%;
+}
+
+.new_company_form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* ------------------------------------------------------------------------------------------------------------------- */
+
+.infos_prsnl_recruteur_container form .profile-input {
+  display: none; /* Masquer le champ de téléchargement par défaut */
+}
+
+.infos_prsnl_recruteur_container form .recruteur label {
+  cursor: pointer;
+  background-color: #f0f0f0;
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+
+.infos_prsnl_recruteur_container form .recruteur label:hover {
+  background-color: #e0e0e0;
+}
+
+#profile-input-recruteur[type="file"]::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+#profile-input-recruteur[type="file"]::before {
+  content: "Choisir une photo de profil";
+  display: inline-block;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.infos_prsnl_recruteur_container form .recruteur i {
+  margin-left: 10px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.infos_prsnl_recruteur_container form .btn {
+  margin-top: 50px;
+}
+
+.infos_prsnl_recruteur_container form button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.infos_prsnl_recruteur_container form button#retour {
+  border: 1px solid green;
+}
+
+.infos_prsnl_recruteur_container form button#retour:hover {
+  background-color: green;
+  color: white;
+}
+
+.infos_prsnl_recruteur_container form button#suivant {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.infos_prsnl_recruteur_container form button#suivant:hover {
+  background-color: #218838;
+}
+
+.entreprise_select {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+}
+.entr_non_affiche {
+  display: flex;
+  align-items: center;
+  transform: translateX(280px);
+}
+.entr_non_affiche label {
+  width: 500px;
+}
+.entr_non_affiche input {
+  transform: translateX(-170px);
+  position: relative;
+}
+
+.entreprise_select select {
+  padding: 10px;
+  font-size: 16px;
+  margin-right: 30px;
+}
+
+.new_company {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.new_company label {
+  font-size: 14px;
+  width: 200px;
+}
+
+.new_company_form {
+  margin-top: 10px;
+}
+
+.new_company_form div {
+  margin-bottom: 10px;
+}
+
+.new_company_form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.new_company_form input[type="text"],
+.new_company_form input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.new_company_form input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+/* ------------------------------------------------------------------------------------------------------------------- */
+
+.new_company_form {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #8bf9b493;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.new_company_form div {
+  width: 45%;
+  margin-bottom: 15px;
+}
+
+.new_company_form label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.new_company_form input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  color: #333;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+
+.new_company_form input:focus {
+  border-color: #4070f4;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.new_company_form input[type="text"] {
+  margin-top: 5px;
+}
+.recruteur_infos {
+  margin: 50px 30px 0 50px;
+  background-color: #87ebaf;
+  padding: 20px;
+}
+.recruteur_infos h3 {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+/* ------------------------------------------------------------------------------------------------------------------- */
+
+/* Transition pour les inputs */
+.infos_prsnl_recruteur_container form input,
+.infos_prsnl_recruteur_container .input_date {
+  padding: 10px;
+  margin: 10px;
+  width: 90%;
+  border-radius: 5px;
+  border: none;
+  transition: all 0.3s ease; /* Ajout de la transition */
+}
+
+/* Animation de survol */
+.infos_prsnl_recruteur_container form input:hover {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Animation de focus */
+.infos_prsnl_recruteur_container form input:focus {
+  outline: none;
+  border: 1px solid green; /* Change la couleur de la bordure */
+}
+
+/* Animation de remplissage */
+.infos_prsnl_recruteur_container form input:not(:placeholder-shown) {
+  background-color: #f0f8ff; /* Change la couleur de fond */
+}

@@ -1,0 +1,25 @@
+# Dependencies and generated folders
+node_modules/
+dist/
+build/
+.next/
+coverage/
+.cache/
+__pycache__/
+*.pyc
+*.pyo
+.history/
+uploads/
+
+# Local environment / secrets
+.env
+.env.*
+!.env.example
+ssh1
+ssh2
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,10 @@
+.creer_compte_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 20px;
+}

@@ -1,0 +1,236 @@
+.infos_pro_candidat_container form .infos{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 50px;
+  width: 900px;
+}
+.infos_pro_candidat_container form .infos input, textarea{
+  padding: 15px 10px;
+  margin: 5px 0px;
+  width: 95%;
+  border: none;
+  border-radius: 5px;
+  font-size: 15px;
+  letter-spacing: 1.2px;
+
+}
+.date_debut, .date_fin{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  justify-content: start;
+  width: 95%; 
+}
+.date_debut label, .date_fin label{
+  width: 100%;
+}
+.date_debut input, .date_fin input{
+  transform: translateX(20px);
+}
+.infos_pro_candidat_container form .btn {
+  margin-top: 10px;
+}
+.infos_pro_candidat_container form .btn .ajouter{
+  border: 1px solid green;
+  border-radius: 3px;
+  padding: 5px 15px;
+  margin: 0 10px 0 0;
+  cursor: pointer;
+  color: #000;
+}
+.infos_pro_candidat_container form .btn .ajouter:hover{
+  background-color: #6bc996;
+}
+.infos_pro_candidat_container form .btn .supprimer{
+  border: 1px solid red;
+  border-radius: 3px;
+  padding: 5px 15px;
+  margin: 0 10px 0 0;
+  cursor: pointer;
+  transform: translateX(-20px);
+  background-color: rgb(155, 14, 14);
+}
+.infos_pro_candidat_container form .btn .supprimer:hover{
+  background-color: red
+
+}
+
+.infos_pro_candidat_container form button[type='submit']{
+  padding: 10px 20px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 5px; 
+  margin: 0 10px;
+  cursor: pointer;
+  color: #fff;
+  background-color: green;
+  float: right;
+}
+.infos_pro_candidat_container form button[type='submit']{
+  padding: 10px 20px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 5px; 
+  margin: 0 10px;
+  cursor: pointer;
+  color: #fff;
+  background-color: green;
+  float: right;
+}
+.infos_pro_candidat_container form button[type='submit']:hover{
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
+  transform: scale(1.02);
+  transition: ease-out 0.05s;
+}
+.infos_pro_candidat_container form button[type='button']{
+  padding: 10px 20px;
+  border: 1px solid green;
+  border-radius: 5px; 
+  margin: 0 10px;
+  color: green;
+  cursor: pointer;
+  float: left;
+}
+.infos_pro_candidat_container form button[type='button']:hover{
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
+  transform: scale(1.02);
+  transition: ease-out 0.05s;
+  background-color: green;
+  color: #fff;
+}
+
+
+.candidat_cv{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.candidat_cv input[type='submit']{
+  padding: 10px 15px;
+}
+
+
+
+.infos_pros_recruteur_container form .profile-input {
+  display: none; /* Masquer le champ de téléchargement par défaut */
+}
+
+.infos_pro_candidat_container .candidat_cv  label {
+  cursor: pointer;
+  background-color: #f0f0f0;
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+
+.infos_pro_candidat_container .candidat_cv  label:hover {
+  background-color: #e0e0e0;
+}
+
+.infos_pro_candidat_container .candidat_cv  input[type="file"]::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+.infos_pro_candidat_container .candidat_cv  input[type="file"]::before {
+  content: 'Choisir une photo de profil';
+  display: inline-block;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.infos_pro_candidat_container .candidat_cv label i {
+  margin-left: 10px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+  /* Transition pour les inputs */
+  .infos_pro_candidat_container form input{
+    padding: 10px;
+    margin: 10px;
+    width: 100%;
+    border-radius: 5px;
+    border: none;
+    transition: all 0.3s ease; /* Ajout de la transition */
+  }
+  .infos_pro_candidat_container label{
+    width: 300px;
+  }
+  
+  /* Animation de survol */
+  .infos_pro_candidat_container form input:hover {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Animation de focus */
+  .infos_pro_candidat_container form input:focus {
+    outline: none;
+    border: 1px solid green; /* Change la couleur de la bordure */
+  }
+  
+  /* Animation de remplissage */
+  .infos_pro_candidat_container form input:not(:placeholder-shown) {
+    background-color: #f0f8ff; /* Change la couleur de fond */
+  }
+  
+
+
+
+
+
+
+  .infos_pro_candidat_container {
+    padding: 20px;
+  }
+  
+  .infos {
+    background-color: #87ebaf; /* Sky-blue background */
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .infos h3 {
+    margin-top: 0;
+  }
+  
+  .infos .date_debut {
+    margin-bottom: 10px;
+  }
+  
+  .infos .btn {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .infos .btn button {
+    background-color: green; /* Green background */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .infos .btn button.ajouter {
+    background-color: #9de8cd; /* Blue background */
+  }
+  
+  .infos .btn button.supprimer {
+    background-color: #f44336; /* Red background */
+  }
+  

@@ -1,0 +1,53 @@
+.step-by-step {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.container_step_by_step {
+  display: flex;
+  align-items: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 400px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+}
+
+.circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.09);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.circle.active {
+  background-color: #058c42; /* Couleur du cercle actif */
+}
+
+
+.label {
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.label.active {
+  color: #058c42; /* Couleur du texte actif */
+}
+
+.checkmark {
+  font-size: 18px;
+  color: #fff;
+}
