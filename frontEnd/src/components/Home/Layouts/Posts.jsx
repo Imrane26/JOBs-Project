@@ -1,60 +1,48 @@
-import React, { useEffect, useState } from "react";
-import PostCard from "../Layouts/PostCard";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import axios from 'axios';
+import PostCard from './PostCard';
 
-const Posts = () => {
+export default function Posts() {
   const [publications, setPublications] = useState([]);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    // Fetch publications from the API
     const fetchPublications = async () => {
       try {
-        const token = sessionStorage.getItem("loginData");
-        console.log("Token:", token);
-        const response = await axios.get(
-          "http://localhost:3000/api/publication",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        console.log("API Response:", response.data);
-        setPublications(response.data);
-      } catch (error) {
-        console.error("Error fetching publications:", error);
-        setError(`Error fetching publications: ${error.message}`);
+        const token = sessionStorage.getItem('loginData');
+        const response = await axios.get('http://localhost:3000/api/publication', { headers: { Authorization: `Bearer ${token}` } });
+        setPublications(Array.isArray(response.data) ? response.data : []);
+      } catch (requestError) {
+        console.error('Impossible de charger les publications.', requestError);
+        setError(true);
+      } finally {
+        setLoading(false);
       }
     };
-
     fetchPublications();
-  }, []); // Empty dependency array ensures this runs only once
+  }, []);
 
-  useEffect(() => {
-    // Log publications when it changes
-    console.log("Publications state:", publications);
-  }, [publications]);
+  if (loading) return <StateMessage>Chargement des publications…</StateMessage>;
+  if (error) return <StateMessage>Les publications seront bientôt disponibles.</StateMessage>;
+  if (!publications.length) return <StateMessage>Aucune publication pour le moment. Soyez le premier à partager quelque chose.</StateMessage>;
 
-  return (
-    <div>
-      {error && <p>{error}</p>}
-      {publications.map((pub) => (
-        <PostCard
-          key={pub.publication._id}
-          profileImage={pub.auteur?.info.profilepath }
-          profileName={`${pub.auteur?.info.prenom || ""} ${
-            pub.auteur?.info.nom || ""
-          }`.trim()}
-          profileTitle={pub.auteur?.type || "Unknown"}
-          postDescription={
-            pub.publication.contenu || "No description available"
-          }
-          postImage={pub.publication.imagePath || "defaultPostImagePath"}
-        />
-      ))}
-    </div>
-  );
-};
+  return <FeedList>{publications.map((pub) => {
+    const publication = pub.publication || pub;
+    const author = pub.auteur?.info || {};
+    return (
+      <PostCard
+        key={publication._id}
+        profileImage={author.profilepath || author.profilePath}
+        profileName={[author.prenom, author.nom].filter(Boolean).join(' ') || 'Membre JOB’S'}
+        profileTitle={pub.auteur?.type || 'Membre de la communauté'}
+        postDescription={publication.contenu || 'Publication JOB’S'}
+        postImage={publication.imagePath}
+      />
+    );
+  })}</FeedList>;
+}
 
-export default Posts;
+const FeedList = styled.div`display: grid; gap: 14px;`;
+const StateMessage = styled.div`padding: 28px 18px; border: 1px dashed #b8dcc4; border-radius: 14px; background: #fbfefc; color: var(--jobs-muted); text-align: center; line-height: 1.5;`;

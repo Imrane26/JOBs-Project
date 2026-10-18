@@ -4,6 +4,8 @@ import numpy as np
 def preprocess_image(image_file):
     # Load the image
     original_image = cv2.imread(image_file)
+    if original_image is None:
+        raise ValueError(f"OpenCV cannot read this file as an image: {image_file}")
 
     # Reduce noise
     denoised_image = cv2.medianBlur(original_image, 1)

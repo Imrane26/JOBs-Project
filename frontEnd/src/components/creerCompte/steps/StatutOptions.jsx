@@ -7,6 +7,7 @@ const StatutOptions = () => {
   const [selectedOption, setSelectedOption] = useState("");
   const [buttonClicked, setButtonClicked] = useState(false);
   const [dropdownActive, setDropdownActive] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSelect = (option) => {
     setSelectedOption(option);
@@ -17,8 +18,9 @@ const StatutOptions = () => {
   const handleButtonClick = () => {
     if (selectedOption) {
       setButtonClicked(true);
+      setError("");
     } else {
-      alert("Veuillez sélectionner une option avant de continuer.");
+      setError("Sélectionnez votre profil pour continuer.");
     }
   };
 
@@ -30,36 +32,60 @@ const StatutOptions = () => {
     <div className="statut_options_container">
       {!buttonClicked ? (
         <>
+          <div className="role-selector-heading">
+            <span className="role-selector-step">01</span>
+            <div>
+              <label className="role-selector-label">Votre parcours</label>
+              <p className="role-selector-helper">Choisissez l’espace qui correspond à votre objectif.</p>
+            </div>
+          </div>
           <div
             className={`dropdown ${dropdownActive ? "active" : ""}`}
             onClick={toggleDropdown}
+            role="listbox"
+            aria-expanded={dropdownActive}
+            aria-label="Choisir votre parcours"
           >
-            {selectedOption
-              ? selectedOption.charAt(0).toUpperCase() + selectedOption.slice(1)
-              : "--sélectionner votre option professionnelle--"}
-            <span className="left-icon"></span>
-            <span className="right-icon"></span>
+            <span className={`dropdown-copy ${selectedOption ? "selected" : ""}`}>
+              <span className="dropdown-kicker">Choisissez votre espace</span>
+              <span className="dropdown-value">
+                {selectedOption
+                  ? selectedOption.charAt(0).toUpperCase() + selectedOption.slice(1)
+                  : "Sélectionner un parcours"}
+              </span>
+            </span>
+            <span className="dropdown-toggle" aria-hidden="true">
+              <span className="left-icon"></span>
+              <span className="right-icon"></span>
+            </span>
             <div className="items">
-              <a
-                href="#"
-                onClick={() => handleSelect("candidat")}
+              <button
+                type="button"
+                className={selectedOption === "candidat" ? "chosen" : ""}
+                onClick={(event) => { event.stopPropagation(); handleSelect("candidat"); }}
                 style={{ "--i": 1 }}
               >
-                <span></span>Candidat
-              </a>
-              <a
-                href="#"
-                onClick={() => handleSelect("recruteur")}
+                <span className="option-icon" aria-hidden="true">↗</span>
+                <span className="option-copy"><strong>Candidat</strong><small>Je cherche une opportunité</small></span>
+                <span className="option-check" aria-hidden="true">✓</span>
+              </button>
+              <button
+                type="button"
+                className={selectedOption === "recruteur" ? "chosen" : ""}
+                onClick={(event) => { event.stopPropagation(); handleSelect("recruteur"); }}
                 style={{ "--i": 2 }}
               >
-                <span></span>Recruteur
-              </a>
+                <span className="option-icon" aria-hidden="true">+</span>
+                <span className="option-copy"><strong>Recruteur</strong><small>Je recrute un nouveau talent</small></span>
+                <span className="option-check" aria-hidden="true">✓</span>
+              </button>
             </div>
           </div>
 
           <div className="btnSuivant">
-            <button onClick={handleButtonClick}>Suivant</button>
+            <button onClick={handleButtonClick}>Continuer <span aria-hidden="true">→</span></button>
           </div>
+          {error && <p className="signup_error" role="alert">{error}</p>}
         </>
       ) : (
         <>

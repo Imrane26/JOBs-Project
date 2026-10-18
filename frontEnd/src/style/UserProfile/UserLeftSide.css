@@ -3,14 +3,15 @@
 }
 
 .card {
-  background-color: #fff;
+  background-color: var(--jobs-surface);
   text-align: center;
   overflow: hidden;
   margin-bottom: 8px;
-  border-radius: 5px;
+  border-radius: 16px;
   transition: box-shadow 83ms;
   position: relative;
-  box-shadow: 0 0 0 1px rgb(0 0 0 / 15%), 0 0 0 rgb(0 0 0 / 20%);
+  border: 1px solid var(--jobs-border);
+  box-shadow: 0 8px 20px rgba(36, 51, 43, 0.05);
 }
 
 .userInfo {
@@ -39,12 +40,12 @@
 .userName {
   font-size: 16px;
   font-weight: 600;
-  color: #333;
+  color: var(--jobs-ink);
 }
 
 .userEmail {
   font-size: 14px;
-  color: #666;
+  color: var(--jobs-muted);
   margin-top: 4px;
 }
 
@@ -55,22 +56,22 @@
 
 .sectionTitle {
   font-size: 14px;
-  color: #333;
+  color: var(--jobs-ink);
   margin: 16px 0 8px;
 }
 
 .sectionContent {
   font-size: 14px;
-  color: #666;
+  color: var(--jobs-muted);
   margin-bottom: 8px;
 }
 
 .skill {
   display: inline-block;
-  background: #e1e9ee;
-  color: #333;
+  background: var(--jobs-green-soft);
+  color: var(--jobs-green-dark);
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: 999px;
   margin-right: 4px;
   margin-bottom: 4px;
 }

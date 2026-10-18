@@ -1,12 +1,23 @@
 import cv2
 import os
+import tempfile
+from pathlib import Path
+import fitz
 import pytesseract
 from img2table.document import Image
 from img2table.ocr import TesseractOCR
 
-def extract_text_from_image(image_file_path):
+TESSERACT_PATH = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+if os.path.exists(TESSERACT_PATH):
+    os.environ["PATH"] = os.path.dirname(TESSERACT_PATH) + os.pathsep + os.environ.get("PATH", "")
+    pytesseract.pytesseract.tesseract_cmd = TESSERACT_PATH
+
+def _extract_text_from_image(image_file_path):
     # Lire l'image à l'aide de OpenCV
     image = cv2.imread(image_file_path)
+    if image is None:
+        raise ValueError(f"OpenCV cannot read this file as an image: {image_file_path}")
+
     # Utilisation de Tesseract OCR pour extraire le texte de l'image
     text = pytesseract.image_to_string(image)
     
@@ -34,3 +45,24 @@ def extract_text_from_image(image_file_path):
     # Combiner le texte extrait et les tableaux en une seule chaîne de caractères
     combined_data = extracted_data + text
     return combined_data
+
+
+def extract_text_from_image(image_file_path):
+    """Extract text from an image or a PDF, including scanned PDFs."""
+    extension = Path(image_file_path).suffix.lower()
+    if extension != ".pdf":
+        return _extract_text_from_image(image_file_path)
+
+    page_results = []
+    with fitz.open(image_file_path) as document, tempfile.TemporaryDirectory() as temp_dir:
+        for page_number, page in enumerate(document):
+            native_text = page.get_text("text").strip()
+            pixmap = page.get_pixmap(matrix=fitz.Matrix(2, 2), alpha=False)
+            rendered_path = os.path.join(temp_dir, f"page-{page_number + 1}.png")
+            pixmap.save(rendered_path)
+            ocr_text = _extract_text_from_image(rendered_path)
+            page_results.append(
+                f"Page {page_number + 1}:\n{native_text}\n{ocr_text}".strip()
+            )
+
+    return "\n\n".join(page_results)

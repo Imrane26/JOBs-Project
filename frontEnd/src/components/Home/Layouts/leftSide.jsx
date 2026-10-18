@@ -1,174 +1,56 @@
-import React from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
+import React from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
-export default function LeftSide() {
-  const userData = JSON.parse(sessionStorage.getItem("userData"));
-  console.log(userData)
+export default function LeftSide({ userData = {}, isRecruiter = false }) {
+  const fullName = [userData.nom, userData.prenom].filter(Boolean).join(' ') || 'Votre profil';
+  const roleLabel = isRecruiter ? 'Espace recruteur' : 'Espace candidat';
   return (
     <Container>
       <Card>
         <UserInfo>
           <CardBackground />
-          <Link to={"/profile-utilisateur"}>
+          <Link to="/profile-utilisateur">
             <Photo />
-            <span>{`${userData.nom} ${userData.prenom}`}</span>
+            <span>{fullName}</span>
+            <Role>{roleLabel}</Role>
           </Link>
-          <a>
-            <AddPhotoText></AddPhotoText>
-          </a>
         </UserInfo>
-
         <Widget>
-          <a>
-            <div>
-              <span>Connexions</span>
-              <span>Élargissez votre réseau</span>
-            </div>
-            <i className="fas fa-user-plus"></i>
-          </a>
+          <Link to="/profile-utilisateur">
+            <div><span>{isRecruiter ? 'Mon entreprise' : 'Mon profil'}</span><span>{isRecruiter ? 'Présentez votre activité' : 'Valorisez votre parcours'}</span></div>
+            <i className="fas fa-arrow-right" />
+          </Link>
         </Widget>
-
-        <Item>
-          <div>
-            <span>Mes éléments</span>
-            <a>
-              <i className="fas fa-bookmark"></i>
-            </a>
-          </div>
-        </Item>
+        <Item><span>{isRecruiter ? 'Mes offres' : 'Mes candidatures'}</span><i className="fas fa-bookmark" /></Item>
       </Card>
-
       <CommunityCard>
-        <a>
-          <span>Groupes</span>
-        </a>
-        <a>
-          <span>Événements</span>
-          <i className="fas fa-calendar-plus"></i>
-        </a>
-        <a>
-          <span>Suivre les hashtags</span>
-        </a>
-        <a>
-          <span>Découvrir plus</span>
-        </a>
+        <a href="/comment-ca-marche"><span>Comment ça marche</span></a>
+        <a href="/entreprises"><span>Entreprises</span><i className="fas fa-building" /></a>
+        <a href="/emploi"><span>Découvrir les opportunités</span></a>
       </CommunityCard>
     </Container>
   );
 }
 
-const Container = styled.div`
-  grid-area: leftSide;
-  padding-left: 12px;
-`;
-
+const Container = styled.div`grid-area: leftSide; padding-left: 12px;`;
 const Card = styled.aside`
-  background-color: #fff;
-  text-align: center;
-  overflow: hidden;
-  margin-bottom: 8px;
-  border-radius: 5px;
-  transition: box-shadow 83ms;
-  position: relative;
-  box-shadow: 0 0 0 1px rgb(0 0 0 / 15%), 0 0 0 rgb(0 0 0 / 20%);
+  background: #fff; text-align: center; overflow: hidden; margin-bottom: 12px; border-radius: 16px; position: relative; border: 1px solid var(--jobs-border); box-shadow: 0 12px 28px rgba(36, 51, 43, .06);
 `;
-
-const UserInfo = styled.div`
-  border-bottom: 1px solid rgba(0 0 0 0.15);
-  padding: 12px 12px 16px;
-`;
-
-const CardBackground = styled.div`
-  background: url("/imgs/card-bg.svg");
-  background-position: center;
-  background-size: 462px;
-  height: 54px;
-  margin: -12px -12px;
-`;
-
-const Photo = styled.div`
-  background: url(${"../imgs/download.jpeg"});
-  background-position: center;
-  background-size: 100%;
-  background-clip: content-box;
-  box-sizing: border-box;
-  width: 72px;
-  height: 72px;
-  background-repeat: no-repeat;
-  margin: -40px auto 12px;
-  border: 2px solid white;
-  box-shadow: none;
-  border-radius: 5px;
-  cursor: pointer;
-`;
-
-const AddPhotoText = styled.div`
-  color: #058c42;
-  margin-top: 4px;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.3;
-`;
-
+const UserInfo = styled.div`padding: 12px 12px 16px; border-bottom: 1px solid var(--jobs-border); a { color: var(--jobs-ink); font-weight: 700; }`;
+const CardBackground = styled.div`background: url('/imgs/card-bg.svg') center / cover; height: 54px; margin: -12px -12px;`;
+const Photo = styled.div`background: url('/imgs/download.jpeg') center / cover; width: 72px; height: 72px; margin: -40px auto 12px; border: 3px solid #fff; border-radius: 50%;`;
+const Role = styled.small`display: block; margin-top: 5px; color: var(--jobs-muted); font-weight: 500;`;
 const Widget = styled.div`
-  border-top: 1px solid rgba(0, 0, 0, 0.15);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-  padding: 12px 0;
-  a {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 4px 12px;
-  }
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.08);
-    cursor: pointer;
-  }
-  div {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    span {
-      font-size: 12px;
-      line-height: 1.3;
-      &:first-child {
-        color: rgba(0, 0, 0, 0.6);
-      }
-    }
-  }
+  border-bottom: 1px solid var(--jobs-border); padding: 12px 0;
+  a { display: flex; justify-content: space-between; align-items: center; padding: 4px 16px; }
+  &:hover { background: var(--jobs-green-soft); }
+  div { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; span { font-size: 12px; line-height: 1.3; &:first-child { color: var(--jobs-ink); font-weight: 700; } &:last-child { color: var(--jobs-muted); } } }
+  i { color: var(--jobs-green); }
 `;
-
-const Item = styled.div`
-  div {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 18px;
-  }
-  div:hover {
-    background-color: rgba(0, 0, 0, 0.08);
-    cursor: pointer;
-  }
-`;
-
+const Item = styled.div`display: flex; align-items: center; justify-content: space-between; padding: 18px 16px; color: var(--jobs-text); font-size: .9rem; &:hover { background: var(--jobs-green-soft); } i { color: var(--jobs-green); }`;
 const CommunityCard = styled(Card)`
-  a {
-    padding: 10px 18px;
-    text-align: left;
-    display: flex;
-    justify-content: space-between;
-  }
-  a:hover {
-    color: #058c42;
-    cursor: pointer;
-  }
-  a:last-child {
-    color: rgba(0, 0, 0, 0.6);
-    border-top: 1px solid #d6ced6;
-  }
-  a:last-child:hover {
-    background-color: rgba(0, 0, 0, 0.08);
-    color: #058c42;
-  }
+  a { padding: 11px 16px; text-align: left; display: flex; justify-content: space-between; color: var(--jobs-text); font-size: .85rem; }
+  a:hover { color: var(--jobs-green-dark); background: var(--jobs-green-soft); }
+  a + a { border-top: 1px solid var(--jobs-border); }
 `;

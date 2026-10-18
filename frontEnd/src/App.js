@@ -9,6 +9,8 @@ import CreerCompte from "./components/creerCompte/creerCompte.jsx";
 import LoadingScreen from "./components/Home/Layouts/LoadingScreen.jsx";
 import OffreForm from "./components/Home/Layouts/OffreForm.jsx";
 import UserProfile from "./components/Home/UserProfile/UserProfile.jsx";
+import CommentCaMarche from "./components/CommentCaMarche.jsx";
+import Entreprises from "./components/Entreprises.jsx";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -35,6 +37,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
         <Route path="/créer-compte" element={<CreerCompte />} />
+        <Route path="/comment-ca-marche" element={<CommentCaMarche />} />
+        <Route path="/entreprises" element={<Entreprises />} />
         {isAuthenticated ? (
           <>
             <Route

@@ -19,11 +19,11 @@ const educationSchema = new Schema(
     },
     date_fin: {
       type: Date,
-      required: true,
+      required: false,
     },
     description: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   { _id: false }
@@ -45,11 +45,11 @@ const experienceSchema = new Schema(
     },
     date_fin: {
       type: Date,
-      required: true,
+      required: false,
     },
     description: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   { _id: false }

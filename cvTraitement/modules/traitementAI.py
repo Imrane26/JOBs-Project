@@ -1,10 +1,11 @@
 #traitementAI.py
 import json
 import os
+import re
 import google.generativeai as genai
 
-#setup Api key
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+# La clé reste dans l'environnement local et ne doit jamais être publiée.
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 # Set up the model
 generation_config = {
   "temperature": 1,
@@ -32,9 +33,30 @@ safety_settings = [
   },
 ]
 
+def _parse_model_json(response_text):
+    """Extract the first valid JSON object from Gemini's response.
+
+    Gemini may wrap the object in an explanation or a ```json code block,
+    even when the prompt asks for JSON only.
+    """
+    text = (response_text or "").strip()
+    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text, flags=re.IGNORECASE).strip()
+
+    decoder = json.JSONDecoder()
+    for match in re.finditer(r"[\[{]", text):
+        try:
+            parsed, _ = decoder.raw_decode(text[match.start():])
+            if isinstance(parsed, (dict, list)):
+                return parsed
+        except json.JSONDecodeError:
+            continue
+
+    preview = text[:300].replace("\n", " ")
+    raise ValueError(f"La réponse Gemini ne contient pas de JSON valide: {preview}")
+
 def traitementAi(data):
     # Initialiser le modèle GenerativeModel
-    model = genai.GenerativeModel(model_name="gemini-1.5-pro-latest",
+    model = genai.GenerativeModel(model_name="gemini-3.8-flash",
                                   generation_config=generation_config,
                                   safety_settings=safety_settings)
 
@@ -49,7 +71,7 @@ def traitementAi(data):
   "adresse": "",
   "telephone": "",
   "date_naissance": "",
-  "education": [
+  "educations": [
     {
       "diplome": "",
       "institut": "",
@@ -94,9 +116,7 @@ def traitementAi(data):
     print(convo.last.text)
     
     # Retourner la réponse
-    result_json = convo.last.text
-    cleaned_text = result_json.strip().replace('json', '').replace('`', '')
-    parsed_json = json.loads(cleaned_text)
+    parsed_json = _parse_model_json(convo.last.text)
     
     
     

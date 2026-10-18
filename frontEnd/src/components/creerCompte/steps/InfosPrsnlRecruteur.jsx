@@ -9,6 +9,8 @@ const InfosPrsnlRecruteur = () => {
   const [entreprises, setEntreprises] = useState([]);
   const [newCompany, setNewCompany] = useState(false);
   const [retour, setRetour] = useState(false);
+  const [profileFileName, setProfileFileName] = useState("");
+  const [profilePreviewUrl, setProfilePreviewUrl] = useState("");
   const [formData, setFormData] = useState({
     nom: "",
     siret: "",
@@ -55,8 +57,35 @@ const InfosPrsnlRecruteur = () => {
   };
 
   const handleFileChange = (e) => {
-    setRecruteurData({ ...recruteurData, profilePath: e.target.files[0] });
+    const file = e.target.files?.[0] || null;
+    if (!file) {
+      setRecruteurData((current) => ({ ...current, profilePath: null }));
+      setProfileFileName("");
+      return;
+    }
+
+    const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+    if (!allowedTypes.includes(file.type)) {
+      e.target.value = "";
+      setRecruteurData((current) => ({ ...current, profilePath: null }));
+      setProfileFileName("");
+      return;
+    }
+
+    setRecruteurData((current) => ({ ...current, profilePath: file }));
+    setProfileFileName(file.name);
   };
+
+  useEffect(() => {
+    if (!recruteurData.profilePath) {
+      setProfilePreviewUrl("");
+      return undefined;
+    }
+
+    const previewUrl = URL.createObjectURL(recruteurData.profilePath);
+    setProfilePreviewUrl(previewUrl);
+    return () => URL.revokeObjectURL(previewUrl);
+  }, [recruteurData.profilePath]);
   const handleRedirecthome = () => {
     navigate("/home");
   };
@@ -128,29 +157,43 @@ const InfosPrsnlRecruteur = () => {
             id="profile-input-recruteur"
           />
           <label htmlFor="profile-input-recruteur">
-            Télécharger la photo de profil <i className="fas fa-download"></i>
+            {profilePreviewUrl && (
+              <img className="profile-preview" src={profilePreviewUrl} alt="Aperçu du profil" />
+            )}
+            <span className="profile-upload-copy">
+              <strong>{profileFileName ? "Photo de profil sélectionnée" : "Ajouter une photo de profil"}</strong>
+              <small>{profileFileName || "PNG ou JPG · cliquez pour choisir une image"}</small>
+            </span>
+            <span className="profile-upload-action">
+              {profileFileName ? "Modifier" : "Choisir"} <i className="fas fa-arrow-up" aria-hidden="true"></i>
+            </span>
           </label>
         </div>
 
         <div className="entreprise_select">
+          <div className="company-select-wrap">
           <select
+            className="company-select"
             name="idEntreprise"
             id="entrepriseSelect"
             value={recruteurData.idEntreprise}
             onChange={handleRecruteurChange}
             disabled={newCompany}
           >
-            <option value="">--sélectionnez votre entreprise--</option>
+            <option value="">Sélectionnez votre entreprise</option>
             {entreprises.map((x) => (
               <option key={x._id} value={x._id}>
                 {x.nom}
               </option>
             ))}
           </select>
+          <span className="company-select-arrow" aria-hidden="true"></span>
+          </div>
 
           <div className="entr_non_affiche">
-            <label> entreprise n'est pas affichée?</label>
+            <label htmlFor="new-company-toggle">Mon entreprise n’est pas affichée</label>
             <input
+              id="new-company-toggle"
               type="checkbox"
               checked={newCompany}
               onChange={(e) => setNewCompany(e.target.checked)}
@@ -223,7 +266,6 @@ const InfosPrsnlRecruteur = () => {
         )}
 
         <div className="recruteur_infos">
-          <h3>Recruteur Infos: </h3>
           <input
             type="text"
             placeholder="Nom"

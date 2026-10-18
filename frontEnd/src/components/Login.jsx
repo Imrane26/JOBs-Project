@@ -1,12 +1,11 @@
 // Login.jsx
 import React, { useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled, { keyframes, css } from "styled-components";
 import axios from "axios";
 
 
 const Login = ({ setIsAuthenticated }) => {
-  const location = useLocation();
   const navRef = useRef();
 
   // Handle navigate
@@ -15,6 +14,9 @@ const Login = ({ setIsAuthenticated }) => {
 
   // Handle form input
   const [loginInputs, setLoginInputs] = useState({ email: "", password: "" });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [notice, setNotice] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLoginInputs({ ...loginInputs, [name]: value });
@@ -23,6 +25,8 @@ const Login = ({ setIsAuthenticated }) => {
   // Login action
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setNotice("");
+    setIsSubmitting(true);
     try {
       const response = await axios.post("http://127.0.0.1:3000/api/signin", loginInputs);
       console.log("Login successful!", response.data);
@@ -39,11 +43,35 @@ const Login = ({ setIsAuthenticated }) => {
         }
       );
       sessionStorage.setItem("userData", JSON.stringify(userData.data));
-      navigate("/home");
+      const pendingSearch = sessionStorage.getItem("pendingJobSearch");
+      if (pendingSearch) {
+        sessionStorage.removeItem("pendingJobSearch");
+        navigate(`/emploi?search=${encodeURIComponent(pendingSearch)}`);
+      } else {
+        navigate("/home");
+      }
       
     } catch (error) {
       console.error("Login failed!", error);
+      setNotice("Email ou mot de passe incorrect. Vérifiez vos informations.");
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const value = searchTerm.trim();
+    if (!value) {
+      setNotice("Saisissez un métier, une compétence ou une ville pour commencer.");
+      return;
+    }
+    sessionStorage.setItem("pendingJobSearch", value);
+    setNotice("Connectez-vous ou créez un compte pour consulter les offres.");
+  };
+
+  const handleUnavailableProvider = (provider) => {
+    setNotice(`La connexion avec ${provider} sera disponible après la configuration de ce service.`);
   };
 
   const showNavrBar = () => {
@@ -61,86 +89,47 @@ const Login = ({ setIsAuthenticated }) => {
             <div class="closeMenu icon" onClick={showNavrBar}>
               <i className="fa fa-times"></i>
             </div>
-            <li>
-              <Link
-                to="/"
-                className={`${location.pathname === "/" ? "active" : ""}`}
-              >
-                <i className="fas fa-home"></i> <span id="acceuil">Acceuil</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/listes-des-offres"
-                className={`${
-                  location.pathname === "/listes-des-offres" ? "active" : ""
-                }`}
-              >
-                <i className="fas fa-list"></i> <span id="offre">Liste des offres</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/avis-entreprises"
-                className={`${
-                  location.pathname === "/avis-entreprises" ? "active" : ""
-                }`}
-              >
-                <i className="fas fa-star-half-alt"></i> <span id="avis">Avis sur les entreprises</span> 
-              </Link>
-            </li>
+            <li><Link to="/comment-ca-marche"><i className="fas fa-compass"></i> Comment ça marche</Link></li>
+            <li><Link to="/entreprises"><i className="fas fa-building"></i> Entreprises</Link></li>
           </NavUl>
         </Nav>
 
         <div className="sign">
-          <ul>
-            <li>
-              <Link
-                to="/créer-compte"
-                className={`${
-                  location.pathname === "/créer-compte" ? "active" : ""
-                }`}
-                class="creer"
-              >
-                <i className="fas fa-user "></i>
-                <span >Créer un compte</span>
-              </Link>
-            </li>
-          </ul>
+          <span className="sign-label">Nouveau sur JOB'S ?</span>
+          <Link to="/créer-compte" className="create-link">Créer un compte</Link>
           <div class="openMenu icon" onClick={showNavrBar}>
             <i className="fa fa-bars"></i>
           </div>
         </div>
       </div>
 
-      <SearchBar class="content">
-        <div>
-          <p>Le moyen le plus simple de trouver un emploi</p>
-          <div className="box">
-            <input type="text" placeholder="Entrez un mot-clé" />
-            <button>Rechercher</button>
-          </div>
-        </div>
-      </SearchBar>
-
       <Section>
-        <div>
-          <img src="imgs/1.png" alt="" />
-          <img src="imgs/4.png" alt="" />
-        </div>
+        <SearchBar>
+          <span className="eyebrow">La plateforme qui rapproche les talents et les entreprises</span>
+          <h1>Trouvez une opportunité qui vous ressemble.</h1>
+          <p>Recherchez un emploi, présentez votre parcours et avancez avec un profil qui vous ressemble.</p>
+          <form className="box" onSubmit={handleSearch}>
+            <input type="text" placeholder="Métier, compétence ou ville" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} aria-label="Métier, compétence ou ville" />
+            <button type="submit">Rechercher</button>
+          </form>
+          <div className="trust-line"><i className="fas fa-check-circle"></i> Des offres claires · Un parcours simple · Une identité JOB'S</div>
+          {notice && <div className="notice" role="status">{notice}</div>}
+        </SearchBar>
 
         <SignInContainer>
           <div className="signin-header">
-            <h2>se connecter</h2>
+            <span className="form-eyebrow">Votre espace personnel</span>
+            <h2>Bienvenue</h2>
+            <p>Connectez-vous pour retrouver vos opportunités.</p>
           </div>
 
           <div className="signin-options">
-            <button className="btn btn-google ">
+            <button type="button" className="btn btn-google" onClick={() => handleUnavailableProvider("Google")}>
               <i className="fab fa-google"></i>
               Continuer avec Google
             </button>
 
-            <button className="btn btn-facebook">
+            <button type="button" className="btn btn-facebook" onClick={() => handleUnavailableProvider("Facebook")}>
               <i className="fab fa-facebook"></i>
               Continuer avec Facebook
             </button>
@@ -166,7 +155,7 @@ const Login = ({ setIsAuthenticated }) => {
                 value={loginInputs.password}
                 onChange={handleChange}
               />
-              <input type="submit" className="btn btn-email" value="Continuer avec email"/>
+              <input type="submit" className="btn btn-email" value={isSubmitting ? "Connexion..." : "Continuer avec email"} disabled={isSubmitting}/>
   
             </form>
           </div>
@@ -174,16 +163,12 @@ const Login = ({ setIsAuthenticated }) => {
           <div className="terms-and-privacy">
             <p>
               En continuant, vous acceptez nos{" "}
-              <a href="#">Conditions d'utilisation</a> et
-              <a href="#"> Politique de confidentialité</a>.
+              <a href="#conditions">Conditions d'utilisation</a> et
+              <a href="#confidentialite"> Politique de confidentialité</a>.
             </p>
           </div>
+          {notice && <div className="form-notice" role="status">{notice}</div>}
         </SignInContainer>
-
-        <div >
-          <img src="imgs/2.png" alt="" />
-          <img src="imgs/3.png" alt="" />
-        </div>
       </Section>
 
     </Header>
@@ -193,10 +178,16 @@ const Login = ({ setIsAuthenticated }) => {
 // ------------------------------------------------Styled Components
 
 const Header = styled.header`
+  min-height: 100vh;
+  background: var(--jobs-background, #f6f8f7);
   .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    min-height: 78px;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 28px;
   }
 
   .sign {
@@ -211,42 +202,30 @@ const Header = styled.header`
     align-items: center;
   }
   li a {
-    padding: 10px;
-    color: #454955;
-    letter-spacing: 1px;
-    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 14px;
+    color: #667085;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
   }
   li a:hover {
-    padding: 10px;
     color: #058c42;
-    font-size: 15px;
-    transition: 0.1s ease-in-out;
   }
   i {
     padding: 5px;
     margin-left: 3px;
   }
-  .active {
-    color: #058c42;
-  }
+  .sign-label { color: #667085; font-size: 13px; }
+  .create-link { color: #056b35; font-weight: 800; font-size: 13px; margin-left: 10px; }
 
   .icon {
     padding: 5px;
     cursor: pointer;
     display: none;
     font-size: 1.8rem;
-  }
-
-  @media only screen and (max-width:900px){
-    #acceuil{
-      display:none;
-    }
-    #offre{
-      display:none;
-    }
-    #avis{
-      display:none;
-    }
   }
 
   @media only screen and (max-width: 800px) {
@@ -264,7 +243,7 @@ const Header = styled.header`
       justify-content: center;
       transition: 1s;
       transform: translateY(-100vh);
-      background: #f2f2f2;
+      background: #ffffff;
     }
 
     nav ul {
@@ -272,9 +251,7 @@ const Header = styled.header`
       flex-direction: column;
     }
 
-    i {
-      padding: 20px;
-    }
+    i { padding: 12px; }
 
     .responsive_nav {
       transform: none;
@@ -290,8 +267,8 @@ const Header = styled.header`
 
 const Logo = styled.div`
   img {
-    width: 150px;
-    margin: 10px 50px;
+    width: 142px;
+    display: block;
   }
 `;
 
@@ -304,76 +281,64 @@ const NavUl = styled.ul`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 `;
 
 const SearchBar = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 200px;
-  background-color: #454955;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 320px;
+  padding: 38px 42px 26px;
+  border-radius: 24px;
+  background: #eaf7ef;
+  border: 1px solid #d7efdf;
 
-  .content {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    transform: translateY(30px);
-  }
-  p {
-    color: #f3eff5;
-    font-weight: bold;
-    letter-spacing: 3px;
-  }
+  .eyebrow { color: #056b35; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+  h1 { max-width: 580px; margin: 18px 0 14px; color: #24332b; font-size: clamp(2.2rem, 4vw, 4.2rem); line-height: 1.02; letter-spacing: -.05em; }
+  p { max-width: 560px; color: #667085; font-size: 16px; line-height: 1.6; }
 
   .box {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    width: 55%;
-    margin-top: 20px;
+    width: min(100%, 560px);
+    margin-top: 28px;
   }
   input[type='text'] {
-    margin-left: 50px;
-    padding: 15px;
-    width: 250px;
-    outline-style: none;
-    border: none;
+    padding: 15px 16px;
+    width: 100%;
+    outline: none;
+    border: 1px solid #dbe7de;
+    border-radius: 10px 0 0 10px;
     box-sizing: border-box;
   }
 
   button {
-    padding: 15px;
-    background-color: #16db65;
-    color: #f3eff5;
+    padding: 15px 20px;
+    background-color: #058c42;
+    color: white;
+    border-radius: 0 10px 10px 0;
     border: none;
     outline-style: none;
     cursor: pointer;
   }
+  .trust-line { margin-top: 34px; color: #056b35; font-size: 13px; font-weight: 700; }
+  .notice { margin-top: 14px; color: #056b35; font-size: 13px; font-weight: 700; }
 `;
 
 const Section = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  img {
-    width: auto;
-    height: 200px;
-  }
-
-  @media only screen and (max-width: 1262px) {
-    img {
-      display: flex;
-      flex-direction: column;
-      width: auto;
-      height: 130px;
-    }
-  }
-
-  @media only screen and (max-width: 1049px) {
-    img {
-      display: none;
-    }
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(360px, .75fr);
+  align-items: stretch;
+  gap: 28px;
+  max-width: 1240px;
+  margin: 36px auto 0;
+  padding: 0 28px 48px;
+  @media only screen and (max-width: 800px) {
+    grid-template-columns: 1fr;
+    padding: 0 16px 32px;
   }
 `;
 
@@ -382,11 +347,10 @@ const SignInContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 50px 150px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 36px;
+  border: 1px solid #e4e9e5;
+  border-radius: 20px;
+  box-shadow: 0 14px 35px rgba(36, 51, 43, 0.08);
 
 
 
@@ -395,8 +359,8 @@ const SignInContainer = styled.div`
 
   overflow: hidden;
   position: relative;
-  box-shadow: 0 10px 40px -10px rgba(0, 128, 36, 0.2);
-  border-radius: 5px;
+  box-shadow: 0 14px 35px rgba(36, 51, 43, 0.08);
+  border-radius: 20px;
 
   /* Styles pour l'animation rainbow */
   ${(props) =>
@@ -439,12 +403,11 @@ const SignInContainer = styled.div`
 
   .signin-header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 
-    h2 {
-      font-size: 24px;
-      font-weight: 600;
-    }
+    .form-eyebrow { color: #058c42; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    h2 { margin: 10px 0 6px; color: #24332b; font-size: 30px; font-weight: 800; }
+    p { margin: 0; color: #667085; font-size: 14px; }
   }
 
   .signin-options {
@@ -463,16 +426,18 @@ const SignInContainer = styled.div`
     cursor: pointer;
     transition: background-color 0.3s;
     margin: 5px;
-    width: 300px;
+    width: 100%;
 
     &.btn-google {
-      background-color: #4285f4;
-      color: #fff;
+      background-color: #fff;
+      border: 1px solid #e4e9e5;
+      color: #344054;
     }
 
     &.btn-facebook {
-      background-color: #3b5998;
-      color: #fff;
+      background-color: #fff;
+      border: 1px solid #e4e9e5;
+      color: #344054;
     }
 
     &:hover {
@@ -480,13 +445,13 @@ const SignInContainer = styled.div`
     }
 
     &.btn-google:hover {
-      background-color: #005ff7;
-      color: #fff;
+      background-color: #eaf7ef;
+      color: #056b35;
     }
 
     &.btn-facebook:hover {
-      background-color: #173a87;
-      color: #fff;
+      background-color: #eaf7ef;
+      color: #056b35;
     }
   }
 
@@ -519,18 +484,18 @@ const SignInContainer = styled.div`
 
     .email-input {
       padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      border: 1px solid #dfe7e1;
+      border-radius: 10px;
       margin-bottom: 10px;
     }
 
     .btn-email {
-      background-color: #fff;
-      border: 1px solid;
-      color: #0d0a0b;
+      background-color: #058c42;
+      border: 1px solid #058c42;
+      color: #fff;
 
       &:hover {
-        background-color: #058c42;
+        background-color: #056b35;
         color: #fff;
         transition: all 0.3s ease-in;
       }
@@ -546,6 +511,7 @@ const SignInContainer = styled.div`
       text-decoration: none;
     }
   }
+  .form-notice { width: 100%; margin-top: 18px; padding: 11px 12px; border-radius: 9px; background: #eaf7ef; color: #056b35; font-size: 13px; line-height: 1.4; text-align: center; }
 
   @media only screen and (max-width: 800px){
     .btn :not(.btn-google, .btn-facebook){

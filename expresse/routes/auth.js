@@ -65,7 +65,7 @@ router.post("/signup", upload.single('profilePath'), async (req, res) => {
       res.status(400).json({ error: `Erreur lors de la création de ce recruteur: ${error.message}` });
     }
   } else {
-    const { email, password, prenom, nom, adresse, telephone, date_naissance, education, experiences, competences } = req.body;
+    const { email, password, prenom, nom, adresse, telephone, date_naissance, educations, experiences, competences } = req.body;
     try {
       const hashedPassword = await hashPassword(password);
       const user = new User({ email, password: hashedPassword, type_user });
@@ -77,7 +77,7 @@ router.post("/signup", upload.single('profilePath'), async (req, res) => {
         adresse,
         telephone,
         date_naissance,
-        education: education,
+        educations: educations,
         experiences: experiences,
         competences: competences,
         profilePath: profileImagePath
