@@ -5,6 +5,7 @@ const Offre = require("../models/Offre");
 const authMiddleware = require("../middleware/authMiddleware");
 const checkUserType = require("../middleware/checkUserType");
 const mongoose=require("mongoose")
+const { getOffers } = require('../services/jobsService');
 
 // Créer une nouvelle offre
 router.post(
@@ -52,9 +53,14 @@ router.post(
 // Récupérer toutes les offres
 router.get("/offres", authMiddleware, async (req, res) => {
   try {
-    const offres = await Offre.find()
-      .populate("idEntreprises")
-      .populate("candidature");
+    const { search = '', location = '', contract = '', page = 1, limit = 20 } = req.query;
+    const offres = await getOffers({
+      search: String(search),
+      location: String(location),
+      contract: String(contract),
+      page: Number(page) || 1,
+      limit: Number(limit) || 20
+    });
     res.status(200).json(offres);
   } catch (error) {
     res.status(500).json({ error: error.message });

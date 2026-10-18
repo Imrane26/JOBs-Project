@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Entreprise = require('../models/Entreprise');
 const authMiddleware = require("../middleware/authMiddleware");
+const { getCompanies } = require('../services/jobsService');
 
 
 
@@ -24,6 +25,16 @@ router.get('/entreprise',async (req, res) => {
     res.status(200).json(entreprises);
   } catch (error) {
     res.status(500).json({ error: "Erreur lors de la récupération des entreprises", message: error.message });
+  }
+});
+
+// Catalogue public : entreprises JOB'S + entreprises présentes dans les offres externes.
+// La page de présentation utilise cette route pour ne plus dépendre de données écrites en dur.
+router.get('/entreprises/catalogue', async (req, res) => {
+  try {
+    res.status(200).json(await getCompanies());
+  } catch (error) {
+    res.status(500).json({ error: "Erreur lors de la récupération du catalogue", message: error.message });
   }
 });
 
